@@ -1,0 +1,59 @@
+{
+  "rooms": [
+    {
+      "room_id": "ROOM_A",
+      "name": "Conference Room A",
+      "size": "medium",
+      "capacity": 10,
+      "equipment": ["projector"]
+    },
+    {
+      "room_id": "ROOM_B",
+      "name": "Conference Room B",
+      "size": "large",
+      "capacity": 25,
+      "equipment": ["projector", "video_conference"]
+    },
+    {
+      "room_id": "ROOM_C",
+      "name": "Small Meeting Room C",
+      "size": "small",
+      "capacity": 6,
+      "equipment": ["projector", "video_conference", "whiteboard", "audio_system"]
+    }
+  ],
+  "existing_bookings": [
+    {
+      "booking_id": "BK0001",
+      "room_id": "ROOM_A",
+      "organizer": "Marketing Team",
+      "start_time": "2026-01-06T10:00:00",
+      "end_time": "2026-01-06T11:00:00",
+      "attendee_count": 8,
+      "priority": "P3_INTERNAL",
+      "required_equipment": [],
+      "title": "Marketing Department Internal Meeting"
+    },
+    {
+      "booking_id": "BK0002",
+      "room_id": "ROOM_B",
+      "organizer": "Product Team",
+      "start_time": "2026-01-06T10:30:00",
+      "end_time": "2026-01-06T12:00:00",
+      "attendee_count": 18,
+      "priority": "P2_CROSS_DEPT",
+      "required_equipment": ["projector", "video_conference"],
+      "title": "Product Review Meeting"
+    }
+  ],
+  "bug_triggering_request": {
+    "organizer": "Zhang Manager",
+    "start_time": "2026-01-06T10:30:00",
+    "end_time": "2026-01-06T11:30:00",
+    "attendee_count": 9,
+    "priority": "P1_CLIENT",
+    "required_equipment": ["projector", "video_conference"],
+    "title": "Important Client Negotiation",
+    "notes": "This request now correctly fails with the fix: Room A only has projector but needs both projector and video_conference. The fixed system correctly rejects this booking."
+  }
+}
