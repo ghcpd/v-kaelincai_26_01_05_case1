@@ -1,0 +1,161 @@
+# Role & Objective
+
+You are a senior software engineer tasked with fixing a deliberately planted bug in a meeting room booking system and performing comprehensive validation of the completed project. Your goal is to analyze the buggy project, implement the fix, create a corrected version, and validate all functionality with complete test coverage.
+
+# Inputs & Context
+
+**Original Buggy Project Location**: `issue_project/`
+```
+issue_project/
+├── src/
+│   ├── __init__.py
+│   ├── models.py
+│   ├── booking_system.py      # Contains the bug
+│   └── utils.py
+├── tests/
+│   ├── __init__.py
+│   └── test_booking.py        # 2 tests currently FAIL
+├── data/
+│   └── sample_data.json
+├── requirements.txt
+├── README.md
+└── KNOWN_ISSUE.md             # Detailed bug analysis
+```
+
+**Bug Description**:
+- Type: Functional Bug - Feature doesn't behave as specified
+- Location: Equipment validation logic in the booking system
+- Symptom: The system incorrectly approves meeting room bookings when the room has SOME but not ALL of the required equipment
+- Current Test Status: 2 tests FAIL, 2 tests PASS
+
+**Target Workspace**: Create fixed project under `oswe-mini-prime-new/`
+
+# Step-by-Step Instructions
+
+## Phase 1: Analysis
+1. Read and understand the original project structure in `issue_project/`
+2. Review all failing test cases in `tests/test_booking.py`
+3. Read the bug documentation in `KNOWN_ISSUE.md`
+4. Identify the exact location and root cause of the equipment validation bug
+
+## Phase 2: Implementation
+1. Create a new directory structure `oswe-mini-prime-new/fixed_project/` with:
+   ```
+   fixed_project/
+   ├── src/
+   │   ├── __init__.py           # Copy from original
+   │   ├── models.py             # Copy from original
+   │   ├── booking_system.py     # Copy and FIX the bug
+   │   └── utils.py              # Copy from original
+   ├── tests/
+   │   ├── __init__.py           # Copy from original
+   │   └── test_booking.py       # Copy from original
+   ├── data/
+   │   └── sample_data.json      # Copy from original
+   ├── requirements.txt          # Copy from original
+   ├── README.md                 # Create NEW README for fixed version
+   └── FIX_SUMMARY.md            # Create NEW documentation file
+   ```
+
+2. Copy all files from `issue_project/` to `oswe-mini-prime-new/fixed_project/`
+
+3. Fix the equipment validation bug in `src/booking_system.py`:
+   - Modify ONLY the equipment validation logic
+   - Ensure the validation checks that ALL required equipment is present (not just SOME)
+   - If any required equipment is missing, the booking must fail with an error message listing the missing items
+
+## Phase 3: Documentation
+1. Create `oswe-mini-prime-new/fixed_project/README.md` including:
+   - Project overview (fixed version)
+   - What was fixed
+   - Quick start guide
+   - Test execution instructions
+   - Confirmation that all tests pass
+
+2. Create `oswe-mini-prime-new/fixed_project/FIX_SUMMARY.md` including:
+   - Bug description
+   - Root cause analysis
+   - The specific code change made (with line numbers and file references using relative paths)
+   - Before/after code snippets
+   - Test results comparison (before: 2 failed; after: 4 passed)
+
+## Phase 4: Full Validation
+1. Navigate to `oswe-mini-prime-new/fixed_project/`
+2. Install dependencies: `pip install -r requirements.txt`
+3. Create a smoke test script that:
+   - Instantiates the booking system
+   - Creates a room with partial equipment
+   - Attempts to book it with a request requiring all equipment
+   - Validates that the booking fails and error message lists missing items
+4. Execute the smoke test: `python smoke_test.py`
+5. Run the full test suite: `python -m pytest -v`
+6. Verify all 4 tests PASS
+7. Capture complete outputs including:
+   - Dependencies installation confirmation
+   - Smoke test results
+   - Full pytest output showing all 6+ tests passing
+   - Any error traces (should be none)
+
+# Output Specification
+
+**Primary Deliverables**:
+1. Complete `oswe-mini-prime-new/fixed_project/` directory with all source files properly copied and fixed
+2. `fixed_project/README.md` - Updated documentation for the fixed version
+3. `fixed_project/FIX_SUMMARY.md` - Comprehensive fix documentation with:
+   - Line numbers and relative file paths (e.g., `src/booking_system.py:103-120`)
+   - Before/after code comparison
+   - Clear explanation of what changed and why
+
+**Validation Output**:
+- Complete pytest output showing all tests passing (format: `pytest -v`)
+- Smoke test output showing equipment validation correctly rejects bookings with missing equipment
+- Confirmation that the original `issue_project/` directory remains unchanged
+
+**Final Validation Report** (include in response):
+- Summary of runtime results
+- Explicit statement of test status (all passed or any failures)
+- Confirmation that system launches successfully without errors
+- List of all test cases executed and their results
+
+# Constraints & Preferences
+
+**DO**:
+- Create the fixed project in `oswe-mini-prime-new/fixed_project/` (new directory, not modifying original)
+- Copy ALL files from `issue_project/` to the new location
+- Fix ONLY the specific equipment validation bug (minimal changes)
+- Ensure ALL tests pass without modifying test cases
+- Use relative paths in all documentation (NOT absolute paths like `C:\BugBash\...`)
+- Make the fix production-ready and follow Python best practices
+
+**DO NOT**:
+- Modify any files in the original `issue_project/` directory
+- Change business logic beyond fixing the specific bug
+- Add new features or refactor unnecessary code
+- Modify test cases
+- Use absolute file paths in documentation
+- Leave any errors or failing tests unresolved
+
+**Technical Requirements**:
+- Python 3.7+
+- All dependencies specified in `requirements.txt`
+- The fix should be simple (1-5 lines of code change)
+- Equipment validation must use set operations (e.g., set difference to find missing items)
+
+# Quality Gates & Verification
+
+Before declaring the task complete, verify:
+1. ✅ `oswe-mini-prime-new/fixed_project/` directory exists with complete structure
+2. ✅ Original `issue_project/` is unchanged
+3. ✅ All 4 core tests pass (the 2 that previously failed + 2 that passed)
+4. ✅ Smoke test confirms equipment validation correctly rejects partial matches
+5. ✅ `README.md` and `FIX_SUMMARY.md` are complete and well-documented
+6. ✅ No runtime errors or exceptions during test execution
+7. ✅ Code follows Python conventions and best practices
+8. ✅ All outputs use relative paths, not absolute paths
+
+**Success Criteria**: The task is complete when:
+- New `fixed_project/` directory exists with all files
+- `pytest -v` shows all 4+ tests PASSING
+- Smoke test demonstrates correct equipment validation behavior
+- Documentation clearly explains the fix with code examples
+- Original project remains unchanged
