@@ -1,0 +1,181 @@
+# Role & Objective
+
+You are a senior software engineer tasked with fixing a deliberately planted bug in a meeting room booking system and performing comprehensive validation of the completed project. Your goal is to analyze the buggy project, identify the issue, create a corrected version in a new directory, and thoroughly validate that all functionality works as expected.
+
+# Inputs & Context
+
+**Original Buggy Project Location**: `issue_project/`
+```
+issue_project/
+├── src/
+│   ├── __init__.py
+│   ├── models.py
+│   ├── booking_system.py      # Contains the bug
+│   └── utils.py
+├── tests/
+│   ├── __init__.py
+│   └── test_booking.py        # 2 tests currently FAIL
+├── data/
+│   └── sample_data.json
+├── requirements.txt
+├── README.md
+└── KNOWN_ISSUE.md             # Detailed bug analysis
+```
+
+**Bug Description**:
+- Type: Functional Bug - Feature doesn't behave as specified (ignores constraints)
+- Location: Equipment validation logic in the booking system
+- Symptom: The system incorrectly approves meeting room bookings when the room has SOME but not ALL of the required equipment
+- Current Test Status: 2 tests FAIL (`test_bug_partial_equipment_match_should_fail`, `test_bug_client_meeting_scenario`), 2 tests PASS
+
+**Target Workspace**: Create fixed project under `oswe-mini-m23a2s165/`
+
+# Step-by-Step Instructions
+
+## Phase 1: Analysis
+1. Read and understand the original project structure in `issue_project/`
+2. Review all failing test cases in `tests/test_booking.py`
+3. Read the bug documentation in `KNOWN_ISSUE.md`
+4. Identify the exact location and root cause of the equipment validation bug
+
+## Phase 2: Implementation
+1. Create a new directory structure `oswe-mini-m23a2s165/fixed_project/` with the following layout:
+   ```
+   fixed_project/
+   ├── src/
+   │   ├── __init__.py
+   │   ├── models.py
+   │   ├── booking_system.py     # Copy and FIX the bug here
+   │   └── utils.py
+   ├── tests/
+   │   ├── __init__.py
+   │   └── test_booking.py
+   ├── data/
+   │   └── sample_data.json
+   ├── requirements.txt
+   ├── README.md
+   └── FIX_SUMMARY.md
+   ```
+
+2. Copy all files from `issue_project/` to `oswe-mini-m23a2s165/fixed_project/`
+
+3. Fix the equipment validation bug in `src/booking_system.py`:
+   - Modify ONLY the equipment validation logic
+   - Ensure the validation checks that ALL required equipment is present (not just SOME)
+   - If any required equipment is missing, the booking must fail with an error message listing the missing items
+   - The fix should be simple (1-5 lines of code change)
+
+4. Create `oswe-mini-m23a2s165/fixed_project/README.md`:
+   - Project overview (fixed version)
+   - What was fixed
+   - Quick start guide
+   - Test execution instructions
+   - Confirmation that all tests pass
+
+5. Create `oswe-mini-m23a2s165/fixed_project/FIX_SUMMARY.md`:
+   - Bug description
+   - Root cause analysis
+   - The specific code change made (with line numbers)
+   - Before/after code snippets
+   - Test results comparison (before: 2 failed; after: 4 passed)
+   - Use relative paths (e.g., `src/booking_system.py`, not absolute paths)
+
+## Phase 3: Full Validation
+1. Set up the Python environment:
+   - Navigate to `oswe-mini-m23a2s165/fixed_project/`
+   - Install dependencies: `pip install -r requirements.txt`
+
+2. Run environment smoke test:
+   - Create and execute a smoke test script that:
+     - Instantiates the booking system
+     - Creates a room with partial equipment (e.g., only PROJECTOR)
+     - Attempts to book it with a request requiring multiple equipment items (e.g., PROJECTOR + VIDEO_CONFERENCE)
+     - Validates that the booking fails (success=False)
+     - Validates that the error message lists missing equipment (e.g., "Missing equipment: video_conference")
+     - Confirms no runtime errors occur during execution
+
+3. Run the full automated test suite:
+   - Execute: `pytest tests/ -v` (with verbose output)
+   - Capture complete output showing all test results
+   - Verify all 4 core tests pass (the 2 previously failing + 2 previously passing)
+   - Additional tests may exist; all must pass
+
+4. Verification Checklist:
+   - System launches successfully without import errors or exceptions
+   - All automated tests pass (0 failures, all passed)
+   - Equipment validation correctly rejects bookings with missing required items
+   - Error messages clearly identify which equipment is missing
+   - Project behavior is consistent across all test scenarios
+
+# Output Specification
+
+**Primary Deliverables**:
+1. Complete `oswe-mini-m23a2s165/fixed_project/` directory with all source files properly copied and fixed
+2. `fixed_project/README.md` - Documentation for the fixed version
+3. `fixed_project/FIX_SUMMARY.md` - Comprehensive fix documentation with:
+   - Before/after code comparison
+   - Line numbers and relative file paths (e.g., `src/booking_system.py:103-120`)
+   - Clear explanation of what changed and why
+
+**Validation Output**:
+- Complete pytest output showing all tests passing (format: `pytest -v`)
+- Smoke test output demonstrating:
+  - Equipment validation correctly rejects bookings with missing equipment
+  - Error message format: "Room <room_id>: Missing equipment: <item1>, <item2>, etc."
+- No error traces or warnings
+
+**Final Validation Report** (include in response):
+Must explicitly include:
+- Summary of runtime results
+- **Explicit statement**: "All test cases passed" or specific list of passed/failed tests
+- Confirmation that system launches successfully without errors
+- Number of tests executed and their status (e.g., "6 tests executed: 6 passed, 0 failed")
+- Confirmation that equipment validation behaves correctly
+- Any performance metrics or relevant observations
+
+# Constraints & Preferences
+
+**DO**:
+- Create the fixed project in `oswe-mini-m23a2s165/fixed_project/` (new directory)
+- Copy ALL files from `issue_project/` to the new location
+- Fix ONLY the specific equipment validation bug
+- Ensure ALL 4+ tests pass without modifying test cases
+- Use relative paths in all documentation (NOT absolute paths like `C:\BugBash\...`)
+- Make the fix production-ready and follow Python best practices
+- Provide detailed validation results in the response
+
+**DO NOT**:
+- Modify any files in the original `issue_project/` directory
+- Change business logic beyond fixing the specific bug
+- Add new features or refactor unnecessary code
+- Modify test cases
+- Use absolute file paths in documentation
+- Leave any errors or failing tests unresolved
+
+**Technical Requirements**:
+- Python 3.7+
+- All dependencies from `requirements.txt`
+- Equipment validation using set operations (find missing items with set difference)
+- The fix should be minimal (1-5 lines of code change)
+
+# Quality Gates & Verification
+
+Before declaring the task complete, verify:
+1. ✅ `oswe-mini-m23a2s165/fixed_project/` directory exists with complete project structure
+2. ✅ Original `issue_project/` remains unchanged
+3. ✅ All 4+ tests pass (the 2 previously failing + 2 previously passing + any additional tests)
+4. ✅ Smoke test confirms equipment validation correctly rejects partial matches
+5. ✅ `README.md` and `FIX_SUMMARY.md` are complete and well-documented
+6. ✅ No runtime errors or exceptions during test execution
+7. ✅ Code follows Python conventions and best practices
+8. ✅ All outputs use relative paths, not absolute paths
+9. ✅ Error message format clearly lists missing equipment items
+10. ✅ System behavior is consistent and predictable
+
+**Success Criteria**: The task is complete when:
+- New `oswe-mini-m23a2s165/fixed_project/` directory exists with all files
+- `pytest -v` shows all tests PASSING (e.g., "6 passed in 0.03s")
+- Smoke test demonstrates correct equipment validation behavior
+- Documentation clearly explains the fix with code examples
+- Original project remains unchanged
+- **Final validation report explicitly states test pass/fail status**
