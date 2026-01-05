@@ -1,0 +1,180 @@
+# Role & Objective
+
+You are a senior software engineer tasked with fixing a deliberately planted bug in a meeting room booking system and executing comprehensive validation of the completed fixed project. Your goal is to analyze the buggy project, create a corrected version in a new directory, and thoroughly validate that all functionality works correctly without errors.
+
+# Inputs & Context
+
+**Original Buggy Project Location**: `issue_project/`
+```
+issue_project/
+├── src/
+│   ├── __init__.py
+│   ├── models.py
+│   ├── booking_system.py      # Contains the bug
+│   └── utils.py
+├── tests/
+│   ├── __init__.py
+│   └── test_booking.py        # 2 tests currently FAIL
+├── data/
+│   └── sample_data.json
+├── requirements.txt
+├── README.md
+└── KNOWN_ISSUE.md             # Detailed bug analysis
+```
+
+**Bug Description**:
+- Type: Functional Bug - Feature doesn't behave as specified (ignores constraints)
+- Location: Equipment validation logic in the booking system
+- Symptom: The system incorrectly approves meeting room bookings when the room has SOME but not ALL of the required equipment
+- Current Test Status: 2 tests FAIL, 2 tests PASS
+
+**Target Workspace**: Create fixed project under `grok-fast/fixed_project/`
+
+# Step-by-Step Instructions
+
+## Phase 1: Project Analysis & Setup
+1. Read and understand the original `issue_project/` structure
+2. Review all test cases in `tests/test_booking.py` to understand the expected behavior
+3. Read the bug documentation in `KNOWN_ISSUE.md`
+4. Identify the exact location and root cause of the equipment validation bug
+
+## Phase 2: Create Fixed Project
+1. Create directory structure: `grok-fast/fixed_project/` with all subdirectories (src, tests, data)
+
+2. Copy all files from `issue_project/` to `grok-fast/fixed_project/`:
+   - `src/__init__.py`, `src/models.py`, `src/utils.py`
+   - `src/booking_system.py` (will be fixed)
+   - `tests/__init__.py`, `tests/test_booking.py`
+   - `data/sample_data.json`
+   - `requirements.txt`
+
+3. Fix the equipment validation bug in `src/booking_system.py`:
+   - Change the validation logic from accepting PARTIAL equipment matches to requiring ALL equipment
+   - Use set operations (e.g., `issubset()` or set difference) to ensure required_equipment is a subset of room.equipment
+   - If equipment is missing, include missing items in the error message
+   - Keep the fix minimal (1-5 lines of code change)
+
+4. Create `grok-fast/fixed_project/README.md`:
+   - Project overview and what was fixed
+   - Quick start instructions
+   - How to run tests
+
+5. Create `grok-fast/fixed_project/FIX_SUMMARY.md`:
+   - Bug description and root cause
+   - The specific code change with line numbers
+   - Before/after code snippets
+   - Test results (before vs. after)
+   - Use relative paths only
+
+## Phase 3: Complete Environment Setup
+1. Install Python dependencies: `pip install -r requirements.txt` (pytest>=7.4.0, python-dateutil>=2.8.2)
+2. Configure and create a Python virtual environment if needed
+3. Ensure all modules can be imported without errors
+
+## Phase 4: Execute Full Validation
+1. **System Launch Test**:
+   - Verify all modules import successfully (src.models, src.booking_system, src.utils)
+   - Confirm no import errors or runtime exceptions
+   - Test basic system instantiation
+
+2. **Automated Test Execution**:
+   - Run `pytest tests/ -v` (verbose output)
+   - Capture full test output with all test names and results
+   - Verify all 4+ tests pass (the 2 originally failing + 2 originally passing + any additional tests)
+   - Ensure 0 test failures
+
+3. **Functional Validation Tests** (execute at least 3 smoke tests):
+   - **Test 1 - Partial Equipment Rejection**: Create room with only PROJECTOR, attempt booking requiring PROJECTOR + VIDEO_CONF, verify booking fails with error message listing missing items
+   - **Test 2 - Complete Equipment Approval**: Create room with PROJECTOR + VIDEO_CONF, attempt booking requiring both items, verify booking succeeds
+   - **Test 3 - No Equipment Requirement**: Create and book room without equipment requirements, verify booking succeeds
+   - Capture all outputs
+
+4. **Validation Checklist**:
+   - All modules import without errors
+   - System instantiates without exceptions
+   - All automated tests pass (exact count required)
+   - Equipment validation correctly rejects partial matches
+   - Equipment validation correctly approves complete matches
+   - Error messages list missing equipment items clearly
+   - All functionality behaves consistently
+
+5. **Comparison Verification** (optional but valuable):
+   - Run original `issue_project` tests to confirm they still fail
+   - Document the before/after comparison
+
+# Output Specification
+
+**Deliverables**:
+1. Complete `grok-fast/fixed_project/` directory structure with all source files
+2. Fixed `src/booking_system.py` with minimal equipment validation changes
+3. `fixed_project/README.md` - Project documentation
+4. `fixed_project/FIX_SUMMARY.md` - Technical fix documentation with before/after code
+
+**Validation Output** (must include in response):
+- Complete pytest output showing all tests passing (include test names and count)
+- System launch test confirming all modules import successfully
+- At least 3 smoke test outputs demonstrating:
+  - Partial equipment rejection with error message
+  - Complete equipment approval
+  - No equipment requirement success
+- Confirmation of runtime behavior consistency
+
+**Final Validation Report** (required):
+Must explicitly include:
+- **Exact statement**: "All test cases passed" with exact test count (e.g., "6/6 tests passed")
+- Python version used
+- Dependencies installed
+- System launch status (success/failure)
+- Number of automated tests executed and results (e.g., "6 passed, 0 failed")
+- Confirmation that equipment validation fix is working correctly
+- Confirmation that original project remains unchanged
+- Any observed runtime performance metrics or issues (or state "None observed")
+
+# Constraints & Preferences
+
+**DO**:
+- Create fixed project in `grok-fast/fixed_project/`
+- Copy ALL files from `issue_project/`
+- Fix ONLY the equipment validation bug (1-5 line change)
+- Ensure ALL tests pass (do not modify test cases)
+- Use relative paths in documentation
+- Make the fix production-ready
+- Provide explicit, detailed validation results
+- Include exact test counts in final report
+
+**DO NOT**:
+- Modify original `issue_project/`
+- Change business logic beyond the bug fix
+- Add new features or refactor unnecessarily
+- Modify test cases
+- Use absolute file paths in documentation
+- Leave ambiguous test result statements
+- Skip validation steps
+
+**Technical Requirements**:
+- Python 3.7+
+- pytest and python-dateutil packages
+- Set-based equipment comparison (issubset or set difference)
+- Error message format: "Missing equipment: <item1>, <item2>, ..."
+
+# Quality Gates & Verification
+
+Verify before completion:
+1. ✅ `grok-fast/fixed_project/` exists with complete structure
+2. ✅ Original `issue_project/` unchanged
+3. ✅ All 4+ tests pass (zero failures)
+4. ✅ System launches without errors
+5. ✅ Equipment validation correctly rejects partial matches
+6. ✅ Equipment validation correctly approves complete matches
+7. ✅ Error messages list missing equipment clearly
+8. ✅ README.md and FIX_SUMMARY.md complete with relative paths
+9. ✅ No runtime exceptions or warnings
+10. ✅ Validation report includes exact test counts
+
+**Success Criteria**:
+- `grok-fast/fixed_project/` created with all files
+- Pytest output shows all tests PASSING (exact format: "N passed")
+- Final report explicitly states: "All test cases passed: X/X"
+- System launch confirmed successful
+- Equipment validation fix verified through smoke tests
+- No errors or failures in any execution step
