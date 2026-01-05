@@ -1,0 +1,211 @@
+# Role & Objective
+
+You are a senior software engineer tasked with fixing a deliberately planted bug in a meeting room booking system and performing comprehensive end-to-end validation of the completed fixed project. Your goal is to analyze the buggy project, create a corrected version, execute all validation steps, and provide a detailed validation report confirming all functionality works correctly.
+
+# Inputs & Context
+
+**Original Buggy Project Location**: `issue_project/`
+```
+issue_project/
+├── src/
+│   ├── __init__.py
+│   ├── models.py
+│   ├── booking_system.py      # Contains the bug
+│   └── utils.py
+├── tests/
+│   ├── __init__.py
+│   └── test_booking.py        # 2 tests currently FAIL
+├── data/
+│   └── sample_data.json
+├── requirements.txt
+├── README.md
+└── KNOWN_ISSUE.md             # Detailed bug analysis
+```
+
+**Bug Description**:
+- Type: Functional Bug - Feature doesn't behave as specified
+- Location: Equipment validation logic in the booking system
+- Symptom: System incorrectly approves bookings when the room has SOME but not ALL of the required equipment
+- Current Test Status: 2 tests FAIL, 2 tests PASS
+
+**Target Workspace**: Create fixed project under `Claude-haiku-4.5/fixed_project/`
+
+# Step-by-Step Instructions
+
+## Phase 1: Analysis & Project Setup
+1. Read and understand the original `issue_project/` structure and all files
+2. Review all test cases in `tests/test_booking.py` to understand expected behavior
+3. Read the detailed bug documentation in `KNOWN_ISSUE.md`
+4. Identify the exact location and root cause of the equipment validation bug in `src/booking_system.py`
+
+## Phase 2: Create Fixed Project
+1. Create directory structure: `Claude-haiku-4.5/fixed_project/` with all subdirectories (src, tests, data)
+
+2. Copy all files from `issue_project/` to `Claude-haiku-4.5/fixed_project/`:
+   - All source files: `src/__init__.py`, `src/models.py`, `src/utils.py`, `src/booking_system.py`
+   - All test files: `tests/__init__.py`, `tests/test_booking.py`
+   - Data files: `data/sample_data.json`
+   - Configuration: `requirements.txt`
+
+3. Fix the equipment validation bug in `src/booking_system.py`:
+   - Change the validation from accepting PARTIAL equipment matches to requiring ALL equipment
+   - Use set operations (e.g., `issubset()` or set difference) to ensure required_equipment is a subset of room.equipment
+   - Include missing items in error message when equipment is missing
+   - Keep the fix minimal (1-5 lines of code change)
+
+4. Create comprehensive documentation:
+   - `Claude-haiku-4.5/fixed_project/README.md`: Project overview and fix explanation
+   - `Claude-haiku-4.5/fixed_project/FIX_SUMMARY.md`: Detailed fix documentation with before/after code
+
+## Phase 3: Complete Environment Setup
+1. Install Python dependencies: `pip install -r requirements.txt`
+2. Configure Python virtual environment
+3. Ensure all modules can be imported without errors
+
+## Phase 4: Execute Full Comprehensive Validation
+
+### 4.1 System Launch & Import Verification
+- Verify all modules import successfully (src.models, src.booking_system, src.utils)
+- Confirm no import errors or runtime exceptions occur
+- Test basic system instantiation
+
+### 4.2 Automated Test Execution
+- Run `pytest tests/ -v` with verbose output showing all test names and results
+- Capture complete test output
+- Verify all 4+ tests pass (the 2 originally failing + 2 originally passing + any additional tests)
+- Ensure 0 test failures
+
+### 4.3 Functional Behavior Validation Tests
+Execute at least 3 comprehensive smoke tests demonstrating the fix:
+
+**Test 1 - Partial Equipment Rejection** (verifies the main bug is fixed):
+- Create a room with only PROJECTOR equipment
+- Attempt to book with a request requiring PROJECTOR + VIDEO_CONFERENCE
+- Verify booking fails (success=False)
+- Verify error message lists the missing equipment (e.g., "Missing equipment: video_conference")
+
+**Test 2 - Complete Equipment Approval** (verifies correct behavior):
+- Create a room with PROJECTOR + VIDEO_CONFERENCE + WHITEBOARD + AUDIO
+- Attempt to book with request requiring PROJECTOR + VIDEO_CONFERENCE
+- Verify booking succeeds (success=True)
+- Verify booking ID is generated
+
+**Test 3 - No Equipment Requirement** (verifies backward compatibility):
+- Create and book a room without any equipment requirements
+- Verify booking succeeds
+
+### 4.4 Validation Checklist & Consistency Tests
+Verify all of the following:
+- All modules import without errors
+- System instantiates without exceptions
+- All automated tests pass (exact count required)
+- Equipment validation correctly rejects partial matches
+- Equipment validation correctly approves complete matches
+- Error messages clearly list missing equipment
+- Functionality behaves consistently across all test scenarios
+- No regressions in other booking logic (capacity, priority, time slots)
+- Original `issue_project/` remains completely unchanged
+
+### 4.5 Before/After Comparison (Optional but Valuable)
+- Run original `issue_project` tests to confirm they still fail as expected
+- Document the before/after comparison to validate the fix
+
+## Phase 5: Generate Comprehensive Validation Report
+Create detailed documentation of all validation results including:
+- System launch status and test environment information
+- Complete pytest output with all test names and status
+- Results of all 3+ smoke tests with exact outputs
+- Confirmation of system consistency and bug fix verification
+- Any performance metrics or observations
+
+# Output Specification
+
+**Deliverables** (must create):
+1. Complete `Claude-haiku-4.5/fixed_project/` directory with all project files
+2. Fixed `src/booking_system.py` with minimal equipment validation changes
+3. `fixed_project/README.md` - Project documentation for the fixed version
+4. `fixed_project/FIX_SUMMARY.md` - Technical fix documentation with before/after code snippets
+
+**Validation Output** (must include in response):
+- Complete pytest output showing all test results with test names (format: `6 passed in X.XXs`)
+- System launch confirmation (all imports successful, system instantiates)
+- Output from all 3+ smoke tests demonstrating:
+  - Partial equipment rejection with error message showing missing items
+  - Complete equipment approval with booking creation
+  - No equipment requirement success
+- Comparison of fixed vs. original project test results
+
+**Final Validation Report** (REQUIRED - must include in response):
+The response MUST explicitly include all of the following:
+
+1. **Explicit Statement of Test Status**: "All test cases passed: 6/6" (or actual count)
+2. **System Launch Confirmation**: "System launches successfully without errors"
+3. **Test Execution Summary**: "Executed X tests: Y passed, Z failed"
+4. **Equipment Validation Fix Verification**: Confirm partial matches are rejected and complete matches are approved
+5. **Original Project Status**: Confirm original issue_project remains unchanged
+6. **Python Environment Details**: Python version, dependencies installed
+7. **Functional Consistency**: Confirm no regressions in other booking system features
+8. **Production Readiness**: State whether code is production-ready
+
+# Constraints & Preferences
+
+**DO**:
+- Create fixed project in `Claude-haiku-4.5/fixed_project/`
+- Copy ALL files from `issue_project/`
+- Fix ONLY the specific equipment validation bug (minimal changes)
+- Ensure ALL tests pass without modifying test cases
+- Use relative paths in all documentation
+- Make the fix production-ready and follow Python best practices
+- Provide explicit, detailed validation results with exact counts
+- Include all required validation report elements
+- Execute at least 3 comprehensive smoke tests
+
+**DO NOT**:
+- Modify original `issue_project/`
+- Change business logic beyond the bug fix
+- Add new features or refactor unnecessarily
+- Modify test cases
+- Use absolute file paths in documentation
+- Provide vague or ambiguous test results
+- Skip any validation steps
+
+**Technical Requirements**:
+- Python 3.7+
+- pytest and python-dateutil packages
+- Set-based equipment comparison (issubset or set difference)
+- Error message format: "Room <room_id>: Missing equipment: <item1>, <item2>, ..."
+- All 4+ tests must pass
+
+# Quality Gates & Verification
+
+Verify before completion:
+1. ✅ `Claude-haiku-4.5/fixed_project/` exists with complete structure
+2. ✅ Original `issue_project/` unchanged
+3. ✅ All 4+ tests pass (zero failures)
+4. ✅ System launches without errors
+5. ✅ Equipment validation rejects partial matches correctly
+6. ✅ Equipment validation approves complete matches correctly
+7. ✅ Error messages list missing equipment clearly
+8. ✅ All smoke tests execute successfully
+9. ✅ README.md and FIX_SUMMARY.md complete with relative paths
+10. ✅ No runtime exceptions or warnings observed
+
+**Success Criteria**:
+- `Claude-haiku-4.5/fixed_project/` created with all files
+- Pytest shows all tests PASSING (e.g., "6 passed in 0.04s")
+- Final report includes exact statement: "All test cases passed: X/X"
+- System launch confirmed successful
+- Equipment validation fix verified through multiple smoke tests
+- No errors or failures in any execution step
+- Response explicitly addresses all required validation report elements
+
+---
+
+**CRITICAL FINAL REQUIREMENT**: Your final response must include a comprehensive Validation Summary that explicitly states:
+- Test pass/fail status with exact numbers
+- System launch status
+- Equipment validation fix confirmation
+- Whether code is production-ready
+- Any issues encountered (or explicitly state "None")
+
+Do not use ambiguous language. Use definitive statements like "All X tests passed" or "X tests failed" with exact counts.
